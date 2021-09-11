@@ -136,11 +136,11 @@ where
     }
 
     // DEBUG: show integrated dynamics
-    for x in trajectory {
+    // for x in trajectory {
 
-        println!("{:?}", &x.data);
+    //     println!("{:?}", &x.data);
 
-    }
+    // }
 
 }
 

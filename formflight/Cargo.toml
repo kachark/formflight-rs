@@ -18,11 +18,4 @@ uuid = "0.8"
 csv = "1.1"
 serde = "1.0.126"
 serde_json = "1.0"
-rust-optimal-transport = { path = "../../rust-optimal-transport" }
-# rust-optimal-transport = { git = "https://github.com/kachark/rust-optimal-transport", branch = "main" }
-
-# bin
-plotters = "^0.3.1"
-# polars = "0.14.2"
-
 

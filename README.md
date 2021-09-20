@@ -1,5 +1,7 @@
 # FormFlight-rs
 
+![](https://github.com/kachark/formflight-rs/blob/main/images/trajectory_animation.gif)
+
 This project aims to provide a first-look at the potential that optimal transport has in the areas of task assignment, resource allocation, and formation of dynamical systems.
 
 ## Dependencies

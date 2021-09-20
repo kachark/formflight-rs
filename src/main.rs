@@ -79,6 +79,7 @@ fn main() {
         println!("csv write error, {}", err);
     };
 
+    // (optional)
     match plot::plot_trajectory_3d(&time_history, &result) {
 
         Ok(()) => println!("hi"),

@@ -2,7 +2,7 @@
 use legion::*;
 use mads::ecs::resources::TargetableSet;
 use mads::ecs::components::FullState;
-use crate::scenarios::tracking::components::Agent;
+use crate::ecs::components::Agent;
 
 #[system(for_each)]
 pub fn print_error_state(

@@ -15,8 +15,8 @@ use mads::math::integrators::IntegratorType;
 use mads::ecs::resources::*;
 use mads::ecs::components::*;
 
-use crate::scenarios::tracking::resources::Assignment;
-use crate::scenarios::tracking::components::Agent;
+use crate::ecs::resources::Assignment;
+use crate::ecs::components::Agent;
 
 // #[system(for_each)]
 #[system(par_for_each)]

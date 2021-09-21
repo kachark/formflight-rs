@@ -11,8 +11,8 @@ use mads::ecs::resources::{SimulationResult, SimulationTimeHistory};
 use mads::simulator::state::SimulationState;
 use mads::log::simulation_logger::SimulationLogger;
 
-use crate::scenarios::tracking::resources::AssignmentHistory;
-use crate::scenarios::tracking::components::{Agent, Target};
+use crate::ecs::resources::AssignmentHistory;
+use crate::ecs::components::{Agent, Target};
 
 pub struct Logger;
 

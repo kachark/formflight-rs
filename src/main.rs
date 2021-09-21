@@ -1,22 +1,25 @@
+
 #[allow(non_snake_case)]
 extern crate plotters;
 extern crate rust_optimal_transport as rot;
 
 pub mod plot;
 pub mod distributions;
-pub mod scenarios;
+pub mod tracking_scenario;
+pub mod logger;
+pub mod assignments;
+pub mod ecs;
 
+// MADS
 use mads::simulator::configuration::{EngineConfig, SimulationConfig};
 use mads::simulator::simulation::Simulation;
 use mads::simulator::state::SimulationState;
 use mads::ecs::resources::*;
-// use mads::log::logger::Logger;
 use mads::log::simulation_logger::SimulationLogger;
 
-use crate::scenarios::tracking::tracking_scenario::TrackingScenario;
-use crate::scenarios::tracking::resources::AssignmentHistory;
-
-use crate::scenarios::tracking::logger::Logger;
+// formflight
+use crate::tracking_scenario::TrackingScenario;
+use crate::logger::Logger;
 
 fn main() {
 
@@ -82,7 +85,7 @@ fn main() {
     // (optional)
     match plot::plot_trajectory_3d(&time_history, &result) {
 
-        Ok(()) => println!("hi"),
+        Ok(()) => println!("plot done"),
         Err(_) => println!("plot error")
 
     };

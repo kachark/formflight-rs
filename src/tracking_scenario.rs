@@ -7,18 +7,17 @@ use uuid::Uuid;
 
 use mads::scene::scenario::Scenario;
 use mads::ecs::systems::simple_systems::*;
-use mads::ecs::systems::dynamics_systems::*;
 use mads::ecs::components::*;
 use mads::ecs::resources::*;
 use mads::dynamics::statespace::{State, StateSpace};
 use mads::dynamics::models::linear::double_integrator::*;
 use mads::controls::models::lqr::LinearQuadraticRegulator;
 
-use crate::scenarios::tracking::components::{Agent, Target};
-use crate::scenarios::tracking::resources::{NumAgents, NumTargets, Assignment, AssignmentHistory};
-use crate::scenarios::tracking::error_dynamics_systems::*;
+use crate::ecs::components::{Agent, Target};
+use crate::ecs::resources::{NumAgents, NumTargets, Assignment, AssignmentHistory};
+use crate::ecs::error_dynamics_systems::*;
 use crate::distributions::*;
-use crate::scenarios::tracking::assignments::ot_assignment;
+use crate::assignments::ot_assignment;
 
 pub struct TrackingScenario {
 

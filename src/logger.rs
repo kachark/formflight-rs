@@ -5,12 +5,14 @@ use std::error::Error;
 use std::collections::HashMap;
 use legion::*;
 
+// MADS
 use mads::dynamics::statespace::StateSpace;
 use mads::ecs::components::{SimID, FullState};
 use mads::ecs::resources::{SimulationResult, SimulationTimeHistory};
 use mads::simulator::state::SimulationState;
 use mads::log::simulation_logger::SimulationLogger;
 
+// formflight
 use crate::ecs::resources::AssignmentHistory;
 use crate::ecs::components::{Agent, Target};
 

@@ -38,37 +38,6 @@ fn main() {
     let time_history = simulation.state.resources.get::<SimulationTimeHistory>().unwrap();
     let result = simulation.state.resources.get::<SimulationResult>().unwrap();
 
-
-    // TODO: need to have a logger for scenario specific things - maybe a SimLogger trait
-    // tracking scenario specific
-    // let targetable_set_atomic = simulation.state.resources.get_mut::<TargetableSet>().unwrap();
-    // let assignments_atomic = simulation.state.resources.get_mut::<AssignmentHistory>().unwrap();
-
-//     for (uuid, trajectory) in result.data.iter() {
-//         println!("Entity: {:?}", uuid);
-//         println!("length: {:?}", trajectory.len());
-//         for state in trajectory {
-//             println!("{:?}", state);
-//         }
-//     }
-
-    // println!("{:?}", time_history.data.len());
-    // for t in time_history.data.iter() {
-
-    //     println!("{:?}", t);
-
-    // }
-
-    // println!("{:?}", targetable_set_atomic);
-
-    // // assignments
-    // for (agent_uuid, target_uuids) in assignments_atomic.map.iter() {
-
-    //     println!("Agent id: {}", agent_uuid);
-    //     println!("{:?}", target_uuids);
-
-    // }
-
     let logger = Logger;
     if let Err(err) = logger.to_csv(&simulation.state) {
         println!("csv write error, {}", err);

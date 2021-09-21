@@ -5,6 +5,7 @@ use nalgebra::{DMatrix, DVector};
 use legion::*;
 use uuid::Uuid;
 
+// MADS
 use mads::scene::scenario::Scenario;
 use mads::ecs::systems::simple_systems::*;
 use mads::ecs::components::*;
@@ -13,6 +14,7 @@ use mads::dynamics::statespace::{State, StateSpace};
 use mads::dynamics::models::linear::double_integrator::*;
 use mads::controls::models::lqr::LinearQuadraticRegulator;
 
+// formflight
 use crate::ecs::components::{Agent, Target};
 use crate::ecs::resources::{NumAgents, NumTargets, Assignment, AssignmentHistory};
 use crate::ecs::error_dynamics_systems::*;
@@ -58,6 +60,7 @@ impl TrackingScenario {
 
     }
 
+    // Generate Agent entities and store in a World object
     fn setup_agents(&self, world: &mut World, resources: &mut Resources) {
 
         let radius = 10f32;
@@ -118,6 +121,7 @@ impl TrackingScenario {
 
     }
 
+    // Generate Target entities and store in a World object
     fn setup_targets(&self, world: &mut World, resources: &mut Resources) {
 
         let mut storage = resources.get_mut::<SimulationResult>().unwrap();
@@ -315,7 +319,7 @@ impl Scenario for TrackingScenario {
 
     }
 
-    /// Define systems to be run per loop iteration and return a Schedule to execute
+    /// Defines a schedule of Systems to execute per simulator iteration
     fn build(&self) -> Schedule {
 
         let schedule = Schedule::builder()
@@ -331,7 +335,7 @@ impl Scenario for TrackingScenario {
 
     }
 
-    /// Update and perform logic specific to the scenario
+    /// Update scenario
     fn update(&mut self, world: &mut World, resources: &mut Resources) {
 
         // Updates entities flagged as Targetable

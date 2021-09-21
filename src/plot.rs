@@ -2,6 +2,7 @@
 use plotters::prelude::*;
 use mads::ecs::resources::{SimulationTimeHistory, SimulationResult};
 
+// TODO: axes may be swapped somewhere
 
 pub fn plot_trajectory_3d(
     times: &SimulationTimeHistory,

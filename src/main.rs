@@ -23,12 +23,15 @@ use crate::logger::Logger;
 
 fn main() {
 
-    // Configure simulation, engine, and scenario
+    // Configure MADS simulator
     let engine_config = EngineConfig::default();
     let sim_config = SimulationConfig::default();
     let sim_state = SimulationState::new(engine_config, sim_config);
+
+    // Configure Scenario
     let scenario = TrackingScenario::default();
 
+    // Simulate
     let mut simulation = Simulation::new(sim_state, scenario);
     simulation.build();
     simulation.run();

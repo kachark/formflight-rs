@@ -29,4 +29,5 @@ rust-optimal-transport = { git = "https://github.com/kachark/rust-optimal-transp
 From the root of the project directory:
 ```rust
 cargo run
+cd tools && python plot.py
 ```

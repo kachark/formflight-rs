@@ -1,4 +1,5 @@
 
+import sys, getopt
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -58,7 +59,20 @@ def get_agent_target_plots(ax, trajectories_df):
     return agent_hist, target_hist
 
 
-def main():
+def main(argv):
+
+    saveflag = False
+    try:
+        opts, args = getopt.getopt(argv, "s")
+    except getopt.GetoptError:
+        print("plot.py -s")
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == '-s':
+            saveflag = True
+        else:
+            saveflag = False
 
     print("reading data...")
     trajectories_df = pd.read_csv("../test.csv")
@@ -77,11 +91,12 @@ def main():
     # Animate 3D trajectories
     ani = animation.FuncAnimation(fig, animate, frames=num_data_points, fargs=(trajectories_df, agent_hist), interval=50, blit=True)
 
-    print("saving...this may take a while")
-    ani.save(r'trajectory_animation.gif', writer='imagemagick', fps=30)
+    if saveflag:
+        print("saving...this may take a while")
+        ani.save(r'trajectory_animation.gif', writer='imagemagick', fps=30)
 
     plt.show()
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
 

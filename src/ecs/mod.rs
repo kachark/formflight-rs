@@ -5,5 +5,4 @@ pub mod components;
 pub mod resources;
 
 // ECS systems
-pub mod error_system;
-pub mod error_dynamics_systems;
+pub mod systems;

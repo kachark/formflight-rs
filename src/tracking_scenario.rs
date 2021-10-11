@@ -7,7 +7,7 @@ use uuid::Uuid;
 
 // MADS
 use mads::scene::scenario::Scenario;
-use mads::ecs::systems::simple_systems::*;
+use mads::ecs::systems::simple::*;
 use mads::ecs::components::*;
 use mads::ecs::resources::*;
 use mads::dynamics::statespace::{State, StateSpace};
@@ -17,7 +17,7 @@ use mads::controls::models::lqr::LinearQuadraticRegulator;
 // formflight
 use crate::ecs::components::{Agent, Target};
 use crate::ecs::resources::{NumAgents, NumTargets, Assignment, AssignmentHistory};
-use crate::ecs::error_dynamics_systems::*;
+use crate::ecs::systems::simulate::simulate_lqr_error_dynamics_system;
 use crate::distributions::*;
 use crate::assignments::ot_assignment;
 
@@ -326,7 +326,7 @@ impl Scenario for TrackingScenario {
             // .add_system(print_id_system())
             // .add_system(print_state_system())
             // .add_system(dynamics_lqr_solver_system::<DoubleIntegrator3D>()) // can add any dynamics type here
-            .add_system(error_dynamics_lqr_solver_system::<DoubleIntegrator3D>())
+            .add_system(simulate_lqr_error_dynamics_system::<DoubleIntegrator3D>())
             .add_system(update_result_system())
             .add_system(increment_time_system())
             .build();

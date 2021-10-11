@@ -20,7 +20,7 @@ use crate::ecs::components::Agent;
 
 // #[system(for_each)]
 #[system(par_for_each)]
-pub fn error_dynamics_lqr_solver<T>(
+pub fn simulate_lqr_error_dynamics<T>(
     _agent: &Agent, // NOTE: test only evolving agents and NOT targets
     id: &SimID,
     state: &mut FullState,

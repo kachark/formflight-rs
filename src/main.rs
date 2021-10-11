@@ -42,16 +42,16 @@ fn main() {
     let result = simulator.state.resources.get::<SimulationResult>().unwrap();
 
     let logger = FormFlightLogger;
-    if let Err(err) = logger.to_csv(&simulator.state) {
+    if let Err(err) = logger.to_csv(&simulator.state, "./results.csv") {
         println!("csv write error, {}", err);
     };
 
-    if let Err(err) = logger.assignments_to_json(&simulator.state) {
-        println!("csv write error, {}", err);
+    if let Err(err) = logger.assignments_to_json(&simulator.state, "./assignments.json") {
+        println!("json write error, {}", err);
     };
 
-    if let Err(err) = logger.sim_id_to_json(&simulator.state) {
-        println!("csv write error, {}", err);
+    if let Err(err) = logger.sim_id_to_json(&simulator.state, "./entities.json") {
+        println!("json write error, {}", err);
     };
 
     // (optional)

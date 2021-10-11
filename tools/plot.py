@@ -75,7 +75,7 @@ def main(argv):
             saveflag = False
 
     print("reading data...")
-    trajectories_df = pd.read_csv("../test.csv")
+    trajectories_df = pd.read_csv("../results.csv")
     num_data_points = len(trajectories_df.index)
 
     print("plotting...")

@@ -21,9 +21,9 @@ pub struct FormFlightLogger;
 impl FormFlightLogger {
 
     /// Write Agent-to-Target assignments over time to JSON
-    pub fn assignments_to_json(&self, sim_state: &SimulatorState) -> serde_json::Result<()> {
+    pub fn assignments_to_json(&self, sim_state: &SimulatorState, filepath: &str) -> serde_json::Result<()> {
 
-        let f = fs::File::create("assignments.json").expect("Unable to create file");
+        let f = fs::File::create(filepath).expect("Unable to create file");
         let bw = BufWriter::new(f);
 
         // Access time and stored assignments
@@ -42,9 +42,9 @@ impl FormFlightLogger {
     }
 
     /// Write Agent/Target SimID and corresponding model Statespace to JSON
-    pub fn sim_id_to_json(&self, sim_state: &SimulatorState) -> serde_json::Result<()> {
+    pub fn sim_id_to_json(&self, sim_state: &SimulatorState, filepath: &str) -> serde_json::Result<()> {
 
-        let f = fs::File::create("entities.json").expect("Unable to create file");
+        let f = fs::File::create(filepath).expect("Unable to create file");
         let bw = BufWriter::new(f);
 
         let mut agent_id_query = <(&SimID, &FullState, &Agent)>::query();
@@ -74,52 +74,8 @@ impl FormFlightLogger {
 
 }
 
+// Implement Logger for FormFlightLogger and use default to_csv() function
 impl Logger for FormFlightLogger {
-
-    /// Write SimulationTimeHistory and SimulationResult Resources to CSV
-    fn to_csv(&self, sim_state: &SimulatorState) -> std::result::Result<(), Box<dyn Error>> {
-
-        let mut wtr = csv::Writer::from_path("test.csv")?;
-
-        // Access stored time and entity FullStates
-        let time_history = sim_state.resources.get::<SimulationTimeHistory>().unwrap();
-        let results = sim_state.resources.get::<SimulationResult>().unwrap();
-
-        // println!("{:?}", time_history);
-
-        // Construct header
-        let mut header: Vec<String> = vec!["Time".to_string()];
-        for (id, fullstate_history) in results.data.iter() {
-
-            let dx = fullstate_history[0].data.len();
-            for _ in 0..dx {
-                header.push(id.name.clone());
-            }
-
-        }
-
-        wtr.write_record(&header)?;
-
-        // Go row-by-row and serialize time and header aligned state values
-        for (k, time) in time_history.data.iter().enumerate() {
-
-            let mut row: Vec<f32> = vec![*time];
-            for (_id, state_history) in results.data.iter() {
-                let fullstate_k = &state_history[k];
-                for dim in fullstate_k.data.iter() {
-                    row.push(*dim);
-                }
-            }
-
-            wtr.serialize(row)?;
-
-        }
-
-        wtr.flush()?;
-
-        Ok(())
-
-    }
 
 }
 

@@ -11,46 +11,46 @@ pub mod assignments;
 pub mod ecs;
 
 // MADS
-use mads::simulator::configuration::{EngineConfig, SimulationConfig};
-use mads::simulator::simulation::Simulation;
-use mads::simulator::state::SimulationState;
+use mads::simulator::configuration::{EngineConfig, SimulatorConfig};
+use mads::simulator::simulator::Simulator;
+use mads::simulator::state::SimulatorState;
 use mads::ecs::resources::*;
-use mads::log::simulation_logger::SimulationLogger;
+use mads::log::logger::Logger;
 
 // formflight
 use crate::tracking_scenario::TrackingScenario;
-use crate::logger::Logger;
+use crate::logger::FormFlightLogger;
 
 fn main() {
 
     // Configure MADS simulator
     let engine_config = EngineConfig::default();
-    let sim_config = SimulationConfig::default();
-    let sim_state = SimulationState::new(engine_config, sim_config);
+    let sim_config = SimulatorConfig::default();
+    let sim_state = SimulatorState::new(engine_config, sim_config);
 
     // Configure Scenario
     let scenario = TrackingScenario::default();
 
     // Simulate
-    let mut simulation = Simulation::new(sim_state, scenario);
-    simulation.build();
-    simulation.run();
+    let mut simulator = Simulator::new(sim_state, scenario);
+    simulator.build();
+    simulator.run();
 
     // NOTE: post processing
     // TODO: safely unwrap resources.get()
-    let time_history = simulation.state.resources.get::<SimulationTimeHistory>().unwrap();
-    let result = simulation.state.resources.get::<SimulationResult>().unwrap();
+    let time_history = simulator.state.resources.get::<SimulationTimeHistory>().unwrap();
+    let result = simulator.state.resources.get::<SimulationResult>().unwrap();
 
-    let logger = Logger;
-    if let Err(err) = logger.to_csv(&simulation.state) {
+    let logger = FormFlightLogger;
+    if let Err(err) = logger.to_csv(&simulator.state) {
         println!("csv write error, {}", err);
     };
 
-    if let Err(err) = logger.assignments_to_json(&simulation.state) {
+    if let Err(err) = logger.assignments_to_json(&simulator.state) {
         println!("csv write error, {}", err);
     };
 
-    if let Err(err) = logger.sim_id_to_json(&simulation.state) {
+    if let Err(err) = logger.sim_id_to_json(&simulator.state) {
         println!("csv write error, {}", err);
     };
 

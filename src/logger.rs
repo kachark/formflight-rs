@@ -9,19 +9,19 @@ use legion::*;
 use mads::dynamics::statespace::StateSpace;
 use mads::ecs::components::{SimID, FullState};
 use mads::ecs::resources::{SimulationResult, SimulationTimeHistory};
-use mads::simulator::state::SimulationState;
-use mads::log::simulation_logger::SimulationLogger;
+use mads::simulator::state::SimulatorState;
+use mads::log::logger::Logger;
 
 // formflight
 use crate::ecs::resources::AssignmentHistory;
 use crate::ecs::components::{Agent, Target};
 
-pub struct Logger;
+pub struct FormFlightLogger;
 
-impl Logger {
+impl FormFlightLogger {
 
     /// Write Agent-to-Target assignments over time to JSON
-    pub fn assignments_to_json(&self, sim_state: &SimulationState) -> serde_json::Result<()> {
+    pub fn assignments_to_json(&self, sim_state: &SimulatorState) -> serde_json::Result<()> {
 
         let f = fs::File::create("assignments.json").expect("Unable to create file");
         let bw = BufWriter::new(f);
@@ -42,7 +42,7 @@ impl Logger {
     }
 
     /// Write Agent/Target SimID and corresponding model Statespace to JSON
-    pub fn sim_id_to_json(&self, sim_state: &SimulationState) -> serde_json::Result<()> {
+    pub fn sim_id_to_json(&self, sim_state: &SimulatorState) -> serde_json::Result<()> {
 
         let f = fs::File::create("entities.json").expect("Unable to create file");
         let bw = BufWriter::new(f);
@@ -74,10 +74,10 @@ impl Logger {
 
 }
 
-impl SimulationLogger for Logger {
+impl Logger for FormFlightLogger {
 
     /// Write SimulationTimeHistory and SimulationResult Resources to CSV
-    fn to_csv(&self, sim_state: &SimulationState) -> std::result::Result<(), Box<dyn Error>> {
+    fn to_csv(&self, sim_state: &SimulatorState) -> std::result::Result<(), Box<dyn Error>> {
 
         let mut wtr = csv::Writer::from_path("test.csv")?;
 

@@ -12,10 +12,10 @@ pub mod ecs;
 
 // MADS
 use mads::simulator::configuration::{EngineConfig, SimulatorConfig};
-use mads::simulator::simulator::Simulator;
+use mads::simulator::Simulator;
 use mads::simulator::state::SimulatorState;
 use mads::ecs::resources::*;
-use mads::log::logger::Logger;
+use mads::log::Logger;
 
 // formflight
 use crate::tracking_scenario::TrackingScenario;

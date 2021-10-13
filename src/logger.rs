@@ -10,7 +10,7 @@ use mads::dynamics::statespace::StateSpace;
 use mads::ecs::components::{SimID, FullState};
 use mads::ecs::resources::{SimulationResult, SimulationTimeHistory};
 use mads::simulator::state::SimulatorState;
-use mads::log::logger::Logger;
+use mads::log::Logger;
 
 // formflight
 use crate::ecs::resources::AssignmentHistory;

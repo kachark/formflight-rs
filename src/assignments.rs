@@ -2,6 +2,7 @@
 use std::error::Error;
 use nalgebra::{DVector, DMatrix};
 use rot::ot::emd::emd;
+use rot::regularized::sinkhorn::sinkhorn_knopp;
 use rot::unbalanced::unbalanced_sinkhorn::sinkhorn_knopp_unbalanced;
 use rot::utils::metrics::{dist, MetricType};
 
@@ -58,6 +59,8 @@ pub fn ot_assignment(agent_states: &Vec<Vec<f32>>, target_states: &Vec<Vec<f32>>
     if a_sum == b_sum {
 
         gamma = emd(&mut a, &mut b, &mut cost, None, None)?;
+        // gamma = sinkhorn_knopp(&mut a, &mut b, &mut cost,
+        //                         0.1, None, None)?;
 
     } else {
 

@@ -17,7 +17,7 @@ use mads::controls::models::lqr::LinearQuadraticRegulator;
 // formflight
 use crate::ecs::components::{Agent, Target};
 use crate::ecs::resources::{NumAgents, NumTargets, Assignment, AssignmentHistory};
-use crate::ecs::systems::simulate::simulate_lqr_error_dynamics_system;
+use crate::ecs::systems::simulate::integrate_lqr_error_dynamics_system;
 use crate::distributions::*;
 use crate::assignments::ot_assignment;
 
@@ -40,20 +40,6 @@ impl TrackingScenario {
         Self {
             num_agents,
             num_targets,
-            agent_formation,
-            target_formation
-        }
-
-    }
-
-    pub fn default() -> Self {
-
-        let agent_formation = Distribution::Sphere;
-        let target_formation = Distribution::Circle3D;
-
-        Self {
-            num_agents: 100,
-            num_targets: 100,
             agent_formation,
             target_formation
         }
@@ -292,6 +278,24 @@ impl TrackingScenario {
 
 }
 
+impl Default for TrackingScenario {
+
+    fn default() -> Self {
+
+        let agent_formation = Distribution::Sphere;
+        let target_formation = Distribution::Circle3D;
+
+        Self {
+            num_agents: 50,
+            num_targets: 50,
+            agent_formation,
+            target_formation
+        }
+
+    }
+
+}
+
 impl Scenario for TrackingScenario {
 
     /// Generate Resources for the scenario and insert into Simulator Resource pool
@@ -326,7 +330,7 @@ impl Scenario for TrackingScenario {
             // .add_system(print_id_system())
             // .add_system(print_state_system())
             // .add_system(dynamics_lqr_solver_system::<DoubleIntegrator3D>()) // can add any dynamics type here
-            .add_system(simulate_lqr_error_dynamics_system::<DoubleIntegrator3D>())
+            .add_system(integrate_lqr_error_dynamics_system::<DoubleIntegrator3D>())
             .add_system(update_result_system())
             .add_system(increment_time_system())
             .build();

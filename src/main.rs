@@ -9,17 +9,16 @@ pub mod tracking_scenario;
 pub mod logger;
 pub mod assignments;
 pub mod ecs;
+pub mod post_process;
 
 // MADS
 use mads::simulator::configuration::{EngineConfig, SimulatorConfig};
 use mads::simulator::Simulator;
 use mads::simulator::state::SimulatorState;
-use mads::ecs::resources::*;
-use mads::log::Logger;
 
 // formflight
 use crate::tracking_scenario::TrackingScenario;
-use crate::logger::FormFlightLogger;
+use crate::post_process::*;
 
 fn main() {
 
@@ -36,31 +35,8 @@ fn main() {
     simulator.build();
     simulator.run();
 
-    // NOTE: post processing
-    // TODO: safely unwrap resources.get()
-    let time_history = simulator.state.resources.get::<SimulationTimeHistory>().unwrap();
-    let result = simulator.state.resources.get::<SimulationResult>().unwrap();
-
-    let logger = FormFlightLogger;
-    if let Err(err) = logger.to_csv(&simulator.state, "./results.csv") {
-        println!("csv write error, {}", err);
-    };
-
-    if let Err(err) = logger.assignments_to_json(&simulator.state, "./assignments.json") {
-        println!("json write error, {}", err);
-    };
-
-    if let Err(err) = logger.sim_id_to_json(&simulator.state, "./entities.json") {
-        println!("json write error, {}", err);
-    };
-
-    // (optional)
-    match plot::plot_trajectory_3d(&time_history, &result) {
-
-        Ok(()) => println!("plot done"),
-        Err(_) => println!("plot error")
-
-    };
+    // Post-Process
+    post_process(&simulator);
 
  }
 

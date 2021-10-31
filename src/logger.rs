@@ -6,11 +6,9 @@ use std::collections::HashMap;
 use legion::*;
 
 // MADS
-use mads::dynamics::statespace::StateSpace;
 use mads::ecs::components::{SimID, FullState};
-use mads::ecs::resources::{SimulationResult, SimulationTimeHistory};
 use mads::simulator::state::SimulatorState;
-use mads::log::{LogDataType, Logger};
+use mads::log::Logger;
 
 // formflight
 use crate::ecs::resources::AssignmentHistory;
@@ -28,7 +26,7 @@ impl FormFlightLogger {
 
         // Access time and stored assignments
         // let time_history = sim_state.resources.get::<SimulationTimeHistory>().unwrap();
-        let assignments = sim_state.resources.get_mut::<AssignmentHistory>().unwrap();
+        let assignments = sim_state.ecs.resources.get_mut::<AssignmentHistory>().unwrap();
 
         // Serialize hashmap of assignment history to JSON
         let j = serde_json::to_string_pretty(&assignments.map)?;
@@ -50,14 +48,17 @@ impl FormFlightLogger {
         let mut agent_id_query = <(&SimID, &FullState, &Agent)>::query();
         let mut target_id_query = <(&SimID, &FullState, &Target)>::query();
 
-        let mut entities = HashMap::<String, Vec<(&SimID, &StateSpace)>>::new();
+        // let mut entities = HashMap::<String, Vec<(&SimID, &StateSpace)>>::new();
+        let mut entities = HashMap::<String, Vec<&SimID>>::new();
 
-        for (id, state, _agent) in agent_id_query.iter(&sim_state.world) {
-            entities.entry("Agents".to_string()).or_insert(Vec::new()).push( (&id, &state.statespace) );
+        for (id, state, _agent) in agent_id_query.iter(&sim_state.ecs.world) {
+            // entities.entry("Agents".to_string()).or_insert(Vec::new()).push( (&id, &state.statespace) );
+            entities.entry("Agents".to_string()).or_insert(Vec::new()).push( &id );
         }
 
-        for (id, state, _target) in target_id_query.iter(&sim_state.world) {
-            entities.entry("Targets".to_string()).or_insert(Vec::new()).push( (&id, &state.statespace) );
+        for (id, state, _target) in target_id_query.iter(&sim_state.ecs.world) {
+            // entities.entry("Targets".to_string()).or_insert(Vec::new()).push( (&id, &state.statespace) );
+            entities.entry("Targets".to_string()).or_insert(Vec::new()).push( &id );
         }
 
         // Serialize to JSON

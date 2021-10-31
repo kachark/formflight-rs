@@ -10,7 +10,6 @@ use mads::scene::scenario::Scenario;
 use mads::ecs::systems::simple::*;
 use mads::ecs::components::*;
 use mads::ecs::resources::*;
-use mads::dynamics::statespace::{State, StateSpace};
 use mads::dynamics::models::linear::double_integrator::*;
 use mads::controls::models::lqr::LinearQuadraticRegulator;
 
@@ -77,13 +76,7 @@ impl TrackingScenario {
 
                 // Initial conditions
                 let state = DVector::<f32>::from_vec(vec![pose.0, pose.1, pose.2, 0.0, 0.0, 0.0]);
-                let statespace = StateSpace{
-                    position: State::Position{x: 0, y: 1, z: Some(2)},
-                    velocity: State::Velocity{x: 3, y: 4, z: Some(5)},
-                    attitude: State::Empty,
-                    angular_velocity: State::Empty
-                };
-                let fullstate = FullState { data: state, statespace };
+                let fullstate = FullState { data: state };
 
                 // Agent dynamics model
                 let dynamics = DynamicsModel { model: DoubleIntegrator3D::new() };
@@ -145,13 +138,7 @@ impl TrackingScenario {
 
                 // Initial conditions
                 let state = DVector::<f32>::from_vec(vec![pose.0, pose.1, pose.2, 0.0, 0.0, 0.0]);
-                let statespace = StateSpace{
-                    position: State::Position{x: 0, y: 1, z: Some(2)},
-                    velocity: State::Velocity{x: 3, y: 4, z: Some(5)},
-                    attitude: State::Empty,
-                    angular_velocity: State::Empty
-                };
-                let fullstate = FullState { data: state, statespace };
+                let fullstate = FullState { data: state };
 
                 // Target dynamics
                 let dynamics = DynamicsModel { model: DoubleIntegrator3D::new() };
@@ -327,9 +314,7 @@ impl Scenario for TrackingScenario {
     fn build(&self) -> Schedule {
 
         let schedule = Schedule::builder()
-            // .add_system(print_id_system())
-            // .add_system(print_state_system())
-            // .add_system(dynamics_lqr_solver_system::<DoubleIntegrator3D>()) // can add any dynamics type here
+            .add_system(print_time_system())
             .add_system(integrate_lqr_error_dynamics_system::<DoubleIntegrator3D>())
             .add_system(update_result_system())
             .add_system(increment_time_system())

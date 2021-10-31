@@ -10,19 +10,19 @@ use crate::logger::FormFlightLogger;
 pub fn post_process<T: Scenario>(simulator: &Simulator<T>) {
 
     // TODO: safely unwrap resources.get()
-    let time_history = simulator.state.resources.get::<SimulationTimeHistory>().unwrap();
-    let result = simulator.state.resources.get::<SimulationResult>().unwrap();
+    let time_history = simulator.get_state().ecs.resources.get::<SimulationTimeHistory>().unwrap();
+    let result = simulator.get_state().ecs.resources.get::<SimulationResult>().unwrap();
 
     let logger = FormFlightLogger;
-    if let Err(err) = logger.to_csv(&simulator.state, "./results.csv", LogDataType::SimResult) {
+    if let Err(err) = logger.to_csv(&simulator.get_state(), "./results.csv", LogDataType::SimResult) {
         println!("csv write error, {}", err);
     };
 
-    if let Err(err) = logger.assignments_to_json(&simulator.state, "./assignments.json") {
+    if let Err(err) = logger.assignments_to_json(&simulator.get_state(), "./assignments.json") {
         println!("json write error, {}", err);
     };
 
-    if let Err(err) = logger.sim_id_to_json(&simulator.state, "./entities.json") {
+    if let Err(err) = logger.sim_id_to_json(&simulator.get_state(), "./entities.json") {
         println!("json write error, {}", err);
     };
 

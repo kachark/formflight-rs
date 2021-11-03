@@ -1,10 +1,13 @@
 # FormFlight-rs
 
+This project aims to provide a first-look at the potential that optimal transport has in the areas of task assignment, resource allocation, and vehicle formation.
+
 ![](https://github.com/kachark/formflight-rs/blob/main/images/trajectory_animation.gif)
 
-This project aims to provide a first-look at the potential that optimal transport has in the areas of task assignment, resource allocation, and formation of dynamical systems.
-Individual systems are assigned terminal states to move to and are then modeled performing the actions needed to accomplish the task
-given their dynamics and control laws.
+This image shows a distribution of dynamical systems (Agents) which has the task of moving into a target distribution (Targets). A centralized decision-maker
+uses optimal transport to compute the assignment of individual Agents to Targets such that the group knows where to move to complete the task. In this example,
+each Agent is driven with LQR controls.
+
 
 ## Dependencies
 - [mads](https://github.com/kachark/mads)

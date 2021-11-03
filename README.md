@@ -5,7 +5,7 @@ This project aims to provide a first-look at the potential that optimal transpor
 ![](https://github.com/kachark/formflight-rs/blob/main/images/trajectory_animation.gif)
 
 This image shows a distribution of dynamical systems (Agents) which collectively have the task of moving into a target distribution (Targets).
-A centralized decision-maker uses optimal transport to compute the assignment of individual Agents to Targets, such that the group knows where to move to complete the task.
+A centralized decision-maker, using optimal transport, computes the assignment of Agents to Targets such that the group knows where to move to complete the task.
 
 
 ## Dependencies

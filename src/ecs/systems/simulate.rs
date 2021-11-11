@@ -20,8 +20,8 @@ pub fn integrate_lqr_error_dynamics<T>(
     _agent: &Agent, // NOTE: test only evolving agents and NOT targets
     id: &SimID,
     state: &mut FullState,
-    dynamics: &DynamicsModel<T>,
-    controller: &LQRController,
+    dynamics: &T,
+    controller: &LQRComponent,
     #[resource] time: &SimulationTime,
     #[resource] sim_step: &EngineStep,
     #[resource] integrator: &Integrator,
@@ -37,7 +37,7 @@ where
     let mut trajectory: Vec<DVector<f32>> = vec![x0.clone()];
 
     // Solve the LQR controller
-    let (K, _P) = match controller.model.solve() {
+    let (K, _P) = match controller.solve() {
         Ok((value1, value2)) => (value1, value2),
         Err(_) => (DMatrix::<f32>::zeros(1, 1), DMatrix::<f32>::zeros(1, 1)),
     };
@@ -72,7 +72,7 @@ where
     // Wrap dynamics/controls in appropriately defined closure - f(t, x)
     let f = |t: f32, x: &DVector<f32>| {
         let u = -&K * &error_state;
-        dynamics.model.f(t, x, Some(&u))
+        dynamics.f(t, x, Some(&u))
     };
 
     // Integrate dynamics

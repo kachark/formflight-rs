@@ -10,8 +10,6 @@ use mads::scene::scenario::Scenario;
 use mads::ecs::systems::simple::*;
 use mads::ecs::components::*;
 use mads::ecs::resources::*;
-use mads::dynamics::models::linear::double_integrator::*;
-use mads::controls::models::lqr::LinearQuadraticRegulator;
 
 // formflight
 use crate::ecs::components::{Agent, Target};
@@ -59,16 +57,16 @@ impl TrackingScenario {
         };
 
         // For now just use a double integrator and LQR
-        let double_integrator = DoubleIntegrator3D::new();
-        let A = double_integrator.dynamics.A.clone();
-        let B = double_integrator.dynamics.B.clone();
+        let double_integrator = DoubleIntegrator3DComponent::new();
+        let A = double_integrator.dynamics().A.clone();
+        let B = double_integrator.dynamics().B.clone();
         let Q = DMatrix::<f32>::identity(6, 6);
         let R = DMatrix::<f32>::identity(3, 3);
 
         // Define agent components
-        let agent_components: Vec<(FullState, DynamicsModel::<DoubleIntegrator3D>, LQRController, SimID, Agent)> = (0..self.num_agents).into_iter()
+        let agent_components: Vec<(FullState, DoubleIntegrator3DComponent, LQRComponent, SimID, Agent)> = (0..self.num_agents).into_iter()
             .zip(formation.iter())
-            .map(| (i, pose) | -> (FullState, DynamicsModel::<DoubleIntegrator3D>, LQRController, SimID, Agent) {
+            .map(| (i, pose) | -> (FullState, DoubleIntegrator3DComponent, LQRComponent, SimID, Agent) {
 
                 let name = "Agent".to_string() + &i.to_string();
                 let id = Uuid::new_v4();
@@ -79,10 +77,10 @@ impl TrackingScenario {
                 let fullstate = FullState { data: state };
 
                 // Agent dynamics model
-                let dynamics = DynamicsModel { model: DoubleIntegrator3D::new() };
+                let dynamics = DoubleIntegrator3DComponent::new();
 
                 // Agent controller
-                let controller = LQRController { model: LinearQuadraticRegulator::new(A.clone(), B.clone(), Q.clone(), R.clone()) };
+                let controller = LQRComponent::new(A.clone(), B.clone(), Q.clone(), R.clone());
 
                 let agent_flag = Agent { 0: true };
 
@@ -120,17 +118,17 @@ impl TrackingScenario {
         }
 
         // For now just use a double integrator and LQR
-        let double_integrator = DoubleIntegrator3D::new();
-        let A = double_integrator.dynamics.A.clone();
-        let B = double_integrator.dynamics.B.clone();
+        let double_integrator = DoubleIntegrator3DComponent::new();
+        let A = double_integrator.dynamics().A.clone();
+        let B = double_integrator.dynamics().B.clone();
         let Q = DMatrix::<f32>::identity(6, 6);
         let R = DMatrix::<f32>::identity(3, 3);
 
         // Define target components
-        let target_components: Vec<(FullState, DynamicsModel::<DoubleIntegrator3D>, LQRController, SimID, Target)>
+        let target_components: Vec<(FullState, DoubleIntegrator3DComponent, LQRComponent, SimID, Target)>
             = (0..self.num_targets).into_iter()
             .zip(formation.iter())
-            .map(| (i, pose) | -> (FullState, DynamicsModel::<DoubleIntegrator3D>, LQRController, SimID, Target) {
+            .map(| (i, pose) | -> (FullState, DoubleIntegrator3DComponent, LQRComponent, SimID, Target) {
 
                 let name = "Target".to_string() + &i.to_string();
                 let id = Uuid::new_v4();
@@ -141,10 +139,10 @@ impl TrackingScenario {
                 let fullstate = FullState { data: state };
 
                 // Target dynamics
-                let dynamics = DynamicsModel { model: DoubleIntegrator3D::new() };
+                let dynamics = DoubleIntegrator3DComponent::new();
 
                 // Target controllers
-                let controller = LQRController { model: LinearQuadraticRegulator::new(A.clone(), B.clone(), Q.clone(), R.clone()) };
+                let controller = LQRComponent::new(A.clone(), B.clone(), Q.clone(), R.clone());
 
                 // Identifier flag
                 let target_flag = Target { 0: true };
@@ -315,7 +313,7 @@ impl Scenario for TrackingScenario {
 
         let schedule = Schedule::builder()
             .add_system(print_time_system())
-            .add_system(integrate_lqr_error_dynamics_system::<DoubleIntegrator3D>())
+            .add_system(integrate_lqr_error_dynamics_system::<DoubleIntegrator3DComponent>())
             .add_system(update_result_system())
             .add_system(increment_time_system())
             .build();

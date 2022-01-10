@@ -1,7 +1,7 @@
 
 #[allow(non_snake_case)]
 extern crate plotters;
-extern crate rust_optimal_transport as rot;
+extern crate rust_optimal_transport as ot;
 
 pub mod plot;
 pub mod distributions;

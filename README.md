@@ -21,7 +21,6 @@ Add the following to your Cargo.toml to install the necessary dependencies. NOTE
 ```toml
 [dependencies]
 mads = { git = "https://github.com/kachark/mads", branch = "main" }
-rust-optimal-transport = { git = "https://github.com/kachark/rust-optimal-transport", branch = "main" }
 ```
 
 ## Examples

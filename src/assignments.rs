@@ -2,11 +2,7 @@
 use std::error::Error;
 use ndarray::prelude::*;
 use ndarray_stats::QuantileExt;
-use ot::lp::emd;
-use ot::regularized::sinkhorn::sinkhorn_knopp;
-use ot::regularized::greenkhorn::greenkhorn;
-use ot::unbalanced::sinkhorn_knopp_unbalanced;
-use ot::utils::metrics::{dist, MetricType};
+use ot::prelude::*;
 
 // TODO: one single function for assignments that match for nagents = ntargets or not - actually
 // check for the weights of the discrete distributions summing to the same value or not
@@ -46,25 +42,14 @@ pub fn ot_assignment(agent_states: &Vec<Vec<f32>>, target_states: &Vec<Vec<f32>>
     let mut target_weights = Array1::<f64>::from_vec(vec![1f64 / (ntargets as f64); ntargets]);
 
     // Get Euclidean distance cost between distributions of agent/target states
-    let mut cost = dist(&source_samples, &target_samples, MetricType::SqEuclidean);
+    let mut cost = dist(&source_samples, &target_samples, SqEuclidean);
 
     cost = &cost / *cost.max().unwrap();
 
-//     // Normalize each cost row by it's maximum value
-//     for mut row in cost.axis_iter_mut(Axis(0)) {
-//         let max_ele = row.max();
-//         row.scale_mut(1f64 / max_ele);
-//     }
-
     // Check the weights of the source and target distributions
     // Get OT matrix according to a given cost
-    let gamma = emd(&mut source_weights, &mut target_weights, &mut cost, None, None)?;
-    // let gamma = sinkhorn_knopp(&mut source_weights, &mut target_weights, &mut cost,
-    //                         1E-2, None, None)?;
-    // let gamma = greenkhorn(&mut source_weights, &mut target_weights, &mut cost,
-    //                         1E-2, None, None)?;
-    // let gamma = sinkhorn_knopp_unbalanced(&mut source_weights, &mut target_weights, &mut cost,
-    //                         1E-2, 1E-1, None, None)?;
+    let gamma = EarthMovers::new(&mut source_weights, &mut target_weights, &mut cost).solve()?;
+    // let gamma = SinkhornKnopp::new(&source_weights, &target_weights, &cost, 1E-2).solve()?;
 
     // Convert coupling matrix to binary coupling matrix
     let mut binary = vec![vec![0; ntargets]; nagents];

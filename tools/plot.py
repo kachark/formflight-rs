@@ -14,8 +14,9 @@ def animate(num, data, hist):
         x = data[name].iloc[num]
         y = data[name + ".1"].iloc[num]
         z = data[name + ".2"].iloc[num]
-        plot_obj.set_data(x, y)
-        plot_obj.set_3d_properties(z)
+        # plot_obj.set_data(x, y)
+        # plot_obj.set_3d_properties(z)
+        plot_obj.set_data_3d(x,y,z)
 
     # return tuple of modified plot objects
     return tuple(hist.values())

@@ -271,8 +271,8 @@ impl Default for TrackingScenario {
         let target_formation = Distribution::Circle3D;
 
         Self {
-            num_agents: 50,
-            num_targets: 50,
+            num_agents: 500,
+            num_targets: 500,
             agent_formation,
             target_formation
         }
